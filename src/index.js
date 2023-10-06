@@ -1,17 +1,42 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import "./main.css";
+import reducers from "./store/reducer";
+import { applyMiddleware, createStore } from "redux";
+import { Provider } from "react-redux";
+// import axios from "axios";
+import thunk from "redux-thunk";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+
+// const midddleWare = (store) => {
+//   return (next) => { 
+//     return (action) => {
+//       console.log('Middleware', action);
+//       console.log('Middleware', store.getState())
+//     }
+//   }
+// }
+
+// const fetchDataUsingMiddleware = (store) => (next) => async (action) => {
+//   if(action.type === 'LOGIN') {
+//     const response = await axios.get('https://jsonplaceholder.typicode.com/users')
+//     action.payload = response.data[0].name
+//   }
+//   return next(action)
+// }  
+
+
+let store = createStore(
+  reducers,
+  applyMiddleware(thunk)
+  );
+
+ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
